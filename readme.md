@@ -143,23 +143,23 @@ $ git clone https://github.com/ga-wdi-exercises/weather_underground_ajax.git
 In `script.js`, we will use AJAX to send a `GET` request to the Weather Underground API...
 
 ```js
-$("button").on("click", () => {
+$('button').on('click', () => {
   // Make sure to add your API key to the URL!
-  var url = "https://api.wunderground.com/api/your_key/geolookup/conditions/q/va/midlothian.json"
+  var url = 'https://api.wunderground.com/api/your_key/geolookup/conditions/q/va/midlothian.json'
   $.ajax({
     url: url,
-    type: "get",
-    dataType: "json"
+    type: 'get',
+    dataType: 'json'
     // $.ajax takes an object as an argument with at least three key-value pairs...
     // (1) The URL endpoint for the JSON object.
     // (2) Type of HTTP request.
     // (3) Datatype. Usually JSON.
   }).done(() => {
-    console.log("Ajax request success!")
+    console.log('Ajax request success!')
   }).fail(() => {
-    console.log("Ajax request fails!")
+    console.log('Ajax request fails!')
   }).always(() => {
-    console.log("This always happens regardless of successful ajax request or not.")
+    console.log('This always happens regardless of successful ajax request or not.')
   })
 })
 ```
@@ -248,9 +248,9 @@ Create `app/views/artists/test_ajax.html.erb` and add the following...
 Let's add an event listener to the first link in `app/assets/javascripts/application.js`...
 
 ```javascript
-$(document).ready(()=>{
-  $(".get").on("click", () => {
-    console.log("clicked!");
+$(document).ready(() => {
+  $('.get').on('click', () => {
+    console.log('clicked!')
   })
 })
 ```
@@ -260,27 +260,26 @@ $(document).ready(()=>{
 Great, everything's working. Let's try doing a `GET` request to our API like we did with the Weather Underground. In `app/assets/javascripts/application.js`...
 
 ```javascript
-$(document).ready(()=>{
-  $(".get").on("click", () => {
+$(document).ready(() => {
+  $('.get').on('click', () => {
     $.ajax({
       type: 'GET',
       dataType: 'json',
-      url: "/artists"
-    }).done((response) =>  {
-      console.log(response);
+      url: '/artists'
+    }).done((response) => {
+      console.log(response)
     }).fail((response) => {
-      console.log("Ajax get request failed.");
+      console.log('Ajax get request failed.')
     })
   })
 })
-
 ```
 
 > If we access the response object, we can see all of the artists that were seeded in the database. Inside the done promise, we can interact with and display all the contents of the response.
 
 ## Setup for AJAX POST (10 minutes)
 
-Lets update our view to include some input fields and all of our existing artists in `app/views/artists/test_ajax.html.erb`...
+Let's update our view to include some input fields and all of our existing artists in `app/views/artists/test_ajax.html.erb`...
 
 ```html
 <div class="get">AJAX GET!</div>
@@ -306,23 +305,23 @@ Lets update our view to include some input fields and all of our existing artist
 Let's create an artist using AJAX. In `app/assets/javascripts/application.js`...
 
 ```javascript
-$(document).ready(()=>{
-  $(".post").on("click", () => {
+$(document).ready(() => {
+  $('.post').on('click', () => {
     $.ajax({
       type: 'POST',
       data: {
         artist: {
-          name: "Limp Bizkit",
-          nationality: "USA",
-          photo_url: "http://nerdist.com/wp-content/uploads/2014/12/limp_bizkit-970x545.jpg"
+          name: 'Limp Bizkit',
+          nationality: 'USA',
+          photo_url: 'http://nerdist.com/wp-content/uploads/2014/12/limp_bizkit-970x545.jpg'
         }
       },
       dataType: 'json',
-      url: "/artists"
-    }).done((response) =>  {
-      console.log(response);
+      url: '/artists'
+    }).done((response) => {
+      console.log(response)
     }).fail((response) => {
-      console.log("AJAX POST failed");
+      console.log('AJAX POST failed')
     })
   })
 })
@@ -362,12 +361,12 @@ Add a form to dynamically generate artists from the client side.
   ```
 
   ```js
-  $(document).ready(()=>{
-    $(".post").on("click", () => {
+  $(document).ready(() => {
+    $('.post').on('click', () => {
 
-      let name = $(".name").val()
-      let photo_url = $(".photo_url").val()
-      let nationality = $(".nationality").val()
+      let name = $('.name').val()
+      let photo_url = $('.photo_url').val()
+      let nationality = $('.nationality').val()
 
       $.ajax({
         type: 'POST',
@@ -379,11 +378,11 @@ Add a form to dynamically generate artists from the client side.
           }
         },
         dataType: 'json',
-        url: "/artists"
+        url: '/artists'
       }).done((response) => {
-        console.log(response);
+        console.log(response)
       }).fail(() => {
-        console.log("Failed to create.");
+        console.log('Failed to create.')
       })
     })
   })
@@ -401,23 +400,23 @@ Update an existing artist by adding an AJAX call to the next event listener. Don
   <summary><strong>Solution...</strong></summary>
 
   ```javascript
-  $(document).ready(()=>{
-    $(".put").on("click", () => {
+  $(document).ready(() => {
+    $('.put').on('click', () => {
       $.ajax({
         type: 'PUT',
         data: {
           artist: {
-            name: "Robert Goulet",
-            nationality: "British",
-            photo_url: "http://media.giphy.com/media/u5yMOKjUpASwU/giphy.gif"
+            name: 'Robert Goulet',
+            nationality: 'British',
+            photo_url: 'http://media.giphy.com/media/u5yMOKjUpASwU/giphy.gif'
           }
         },
         dataType: 'json',
-        url: "/artists/6"
+        url: '/artists/6'
       }).done((response) => {
-        console.log(response);
+        console.log(response)
       }).fail(() => {
-        console.log("Failed to update.");
+        console.log('Failed to update.')
       })
     })
   })
@@ -437,17 +436,17 @@ Make an event listener that deletes a record in our database using AJAX in `app/
   <summary><strong>Solution...</strong></summary>
 
   ```js
-  $(document).ready(()=>{
-    $(".delete").on("click", () => {
+  $(document).ready(() => {
+    $('.delete').on('click', () => {
       $.ajax({
         type: 'DELETE',
         dataType: 'json',
-        url: "/artists/4"
+        url: '/artists/4'
       }).done((response) => {
-        console.log("DELETED");
-        console.log(response);
+        console.log('DELETED')
+        console.log(response)
       }).fail(() => {
-        console.log("Failed to delete.");
+        console.log('Failed to delete.')
       })
     })
   })
@@ -485,8 +484,8 @@ In order to do an AJAX `get` request to a 3rd party API...
 ```javascript
 $.ajax({
   url: url,
-  type: "get",
-  dataType: "json"
+  type: 'get',
+  dataType: 'json'
   // $.ajax takes an object as an argument with at least three key-value pairs...
   // (1) The URL endpoint for the JSON object.
   // (2) Type of HTTP request.
@@ -495,9 +494,9 @@ $.ajax({
   console.log(response)
   // Here is where you place code for DOM manipulation or anything else you'd like to do with the response
 }).fail(() => {
-  console.log("Ajax request fails!")
+  console.log('Ajax request fails!')
 }).always(() => {
-  console.log("This always happens regardless of successful ajax request or not.")
+  console.log('This always happens regardless of successful ajax request or not.')
 })
 ```
 
@@ -507,11 +506,11 @@ In order to do an AJAX `get` request to your own rails API...
 $.ajax({
   type: 'GET',
   dataType: 'json',
-  url: "/artists"
+  url: '/artists'
 }).done((response) =>  {
-  console.log(response);
+  console.log(response)
 }).fail((response) => {
-  console.log("Ajax get request failed.");
+  console.log('Ajax get request failed.')
 })
 ```
 
@@ -519,13 +518,13 @@ In order to do an AJAX `post` request to your own rails API...
 ```javascript
 $.ajax({
   type: 'POST',
-  data: {artist: {photo_url: "www.google.com", name: "bob", nationality: "bob"}},
+  data: {artist: {photo_url: 'www.google.com', name: 'bob', nationality: 'bob'}},
   dataType: 'json',
-  url: "/artists"
+  url: '/artists'
 }).done((response) =>  {
-  console.log(response);
+  console.log(response)
 }).fail((response) => {
-  console.log("Ajax get request failed");
+  console.log('Ajax get request failed')
 })
 ```
 
@@ -536,17 +535,17 @@ $.ajax({
   type: 'PUT',
   data: {
     artist: {
-      name: "Robert Goulet",
-      nationality: "American",
-      photo_url: "http://media.giphy.com/media/u5yMOKjUpASwU/giphy.gif"
+      name: 'Robert Goulet',
+      nationality: 'American',
+      photo_url: 'http://media.giphy.com/media/u5yMOKjUpASwU/giphy.gif'
     }
   },
   dataType: 'json',
-  url: "/artists/6"
+  url: '/artists/6'
 }).done((response) => {
-  console.log(response);
+  console.log(response)
 }).fail(() => {
-  console.log("Failed to update.");
+  console.log('Failed to update.')
 })
 ```
 
@@ -556,11 +555,11 @@ In order to do an AJAX `delete` request to your own rails API:
 $.ajax({
   type: 'DELETE',
   dataType: 'json',
-  url: "/artists/9"
+  url: '/artists/9'
 }).done((response) => {
-  console.log("DELETED");
-  console.log(response);
+  console.log('DELETED')
+  console.log(response)
 }).fail(() => {
-  console.log("Failed to delete.");
+  console.log('Failed to delete.')
 })
 ```
