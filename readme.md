@@ -87,7 +87,7 @@ All data sent via HTTP are strings. Unfortunately, what we really want to pass b
 
 APIs are published everywhere. Chances are good that most major content sources you follow online publish their data in some type of serialized format. Heck, [even Marvel publishes an API](http://developer.marvel.com/documentation/getting_started). Look around for a "Developers" section on major websites.
 
-If you need an API but don't know which specific one to use, directories like the [Programmable Web API Directory](http://www.programmableweb.com/apis/directory) or [Public APIs Directory](http://www.publicapis.com/) can be helpful.
+If you need an API but don't know which specific one to use, directories like the [Programmable Web API Directory](http://www.programmableweb.com/apis/directory), [Todd Motto's Public API list](https://github.com/toddmotto/public-apis) or [Public APIs Directory](http://www.publicapis.com/) can be helpful.
 
 ## What Is An API Key?
 
