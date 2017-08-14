@@ -110,6 +110,12 @@ For the first part of this lesson we'll be using the [Weather Underground API](h
 * Click on "Purchase Key" - don't worry, it's free
 * Fill out the resulting form
 
+<details>
+  <summary><strong>If you get stuck try this visual guide to get back on track</strong></summary>
+
+  [Sign-Up Guide](wunderground.md)
+
+</details>
 
 Once you've done that, visit the below link but make sure to replace `your_key` with your API key...
 
