@@ -456,7 +456,7 @@ Make an event listener that deletes a record in our database using AJAX in `app/
 
 ## Closing / Questions
 
-Angular developers often need to perform CRUD functionality to/from an API. This is the stuff that's happening under the hood when we're leveraging Angular Resources, which you will learn about later. You could imagine that writing all the setup for CRUD functionality through javascript could get a bit unwieldy. That's why front end frameworks like Angular exist, they solve that problem.
+JavaScript developers often need to perform CRUD functionality to/from an API. Today we've used jQuery to do this, but there are other smaller libraries that exclusively handle API endpoint interactions. Right now, an AJAX library called axios is very popular, which we'll use later on in the course. There is also the JS language-standard `fetch`, which will replace `XMLHttpRequest` eventually, but its implementation has not stabilized.
 
 ## Sample Quiz Questions
 
