@@ -137,7 +137,7 @@ We can interact with APIs using a jQuery method called AJAX. AJAX ("Asynchronous
 Let's try that out ourselves. Let's start by cloning down [this repo](https://github.com/ga-wdi-exercises/weather_underground_ajax)...
 
 ```bash
-$ git clone https://github.com/ga-wdi-exercises/weather_underground_ajax.git
+$ git clone https://git.generalassemb.ly/ga-wdi-exercises/weather_underground_ajax.git
 ```
 
 In `script.js`, we will use AJAX to send a `GET` request to the Weather Underground API...
@@ -205,10 +205,10 @@ Take our existing code for the the Weather Underground app. Instead of logging t
 
 So we've used AJAX to do an asynchronous `GET` request to an API. More often than not, 3rd party APIs are read-only. They probably don't want just anyone to be able to update the weather however they want. That is not to say that kind of functionality doesn't exist, we just don't have access to it.
 
-It just so happens we've built a Tunr Rails API where we can do full CRUD with AJAX. Go ahead and fork and clone [this repo](https://github.com/ga-wdi-exercises/tunr_rails_ajax)...
+It just so happens we've built a Tunr Rails API where we can do full CRUD with AJAX. Go ahead and fork and clone [this repo](https://git.generalassemb.ly.com/ga-wdi-exercises/tunr_rails_ajax)...
 
 ```bash
-$ git clone https://github.com/ga-wdi-exercises/tunr_rails_ajax.git
+$ git clone https://git.generalassemb.ly.com/ga-wdi-exercises/tunr_rails_ajax.git
 ```
 
 Once you've cloned the repo, `cd` into it and run the usual commands...
