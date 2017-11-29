@@ -1,76 +1,47 @@
 # AJAX and APIs
 
 ## Learning Objectives
-- Explain the difference between synchronous and asynchronous program execution
-- Explain why synchronous program execution is not conducive to the front-end.
-- Use jQuery `$.ajax()` method to make asynchronous GET requests for data.
-- Use jQuery's 'promise' methods to handle AJAX responses asynchronously.
+- Explain what an API is and how to use one
+- Describe AJAX and how it lets us build rich client-side applications
+- Use `fetch()` to make an AJAX call
+- Use promises to handle AJAX responses asynchronously
 - Render new HTML content using data loaded from an AJAX request.
-- Perform POST, PUT, and DELETE requests to an API to modify data.
+- Perform GET, POST, PUT, and DELETE requests to an API to modify data.
 
 ## Framing
 
-In the first couple of weeks, we learned how to style a semantically structured HTML site with the ability to manipulate the DOM. In the past couple weeks or so, we've been learning a lot about server-side requests and responses. Today, we'll be tying these concepts together. Currently, we know how to create applications with full CRUD on models in our database, and that's great. When we do that CRUD, however, it requires a page reload of some kind. It would be really nice if we had some functionality on the client side of our application but could still communicate with the backend without a page refresh. If only we had a client side language that was non-blocking and asynchronous...
+Over the past few weeks, we've learned to build full-stack applications using html, css and ruby on rails. Our applications  persist data to a database, implement some business logic around our data and our users' requests and then display all of that to our user.
 
-## Turn & Talk (10 minutes)
+Today, we're going to learn how to make our applications more dynamic by making it so our application doesn't need to refresh the page to make a request to our server!
 
-> 5 minutes T&T. 5 minutes review.
+## Turn & Talk
+> 10 minutes: 5 min T&T, 5 min review
 
-[Open up Google Maps in your browser](https://www.google.com/maps). As you interact with the web app, consider the following questions...
+[Open up Google Maps in your browser](https://www.google.com/maps). As you interact with the web app, consider the following questions:
 
 <details>
-  <summary><strong>What is happening asynchronously?</strong></summary>
-
-  > Pretty much everything.
+  <summary>1. How many times do you see the page refresh?</summary>
 
 </details>
 
 <details>
-  <summary><strong>How would Google Maps work if everything happened synchronously?</strong></summary>
-
-  > The page would need to reload whenever the map is updated. Consider how HTTP requests work within your Rails application.
+  <summary>2. When you request new data (i.e. by searching for a location), does the page refresh? Does the Google Maps app get data from a server?</summary>
 
 </details>
 
-<details>
-  <summary><strong>Why might synchronous programming not be effective for the front end?</strong></summary>
 
-  > We don't want to sit around and wait for code to execute before we load the rest of our script. It would be really nice if we could just describe what we want to happen when the code finally does execute.
+## What is an API
+API stands for "Application Programming Interface" and is a way of describing certain software design. At the highest level, an API is any application with a set of instructions for how programmers can interact with it. The DOM and Active Record are actually examples of APIs.
 
-</details>
+When we're talking about the web (and web APIs), we're generally talking about an application that we interact with through it's routes. However, requests to an API's routes won't respond with views, they'll respond with data.
 
-### What Is An API?
+### API Data
+An API will receive a scripted request and send a response, just like the full-stack applications we've built so far. The difference is that the API won't render views, it'll just send back data. That data will generally be in one of two forms: XML or JSON.
 
-API stands for "Application Program Interface" and technically applies to all of software design. At the highest level, an API is a set of instructions for programmers to interact with an application. The DOM and Active Record are actually examples of APIs.
+#### XML  
+**XML** stands for "eXtensible Markup Language" and is the granddaddy of serialized data formats (itself based on HTML). XML is fat, ugly and cumbersome to parse. It is increasingly the less common of the two formats you'll encounter. It is still a major format due to its legacy usage across the web. You'll probably always favor using a JSON API, if available.
 
-Since the explosion of information technology, however, the term now commonly refers to web URLs that can be accessed for raw data.
-
-As we move into building single page applications, now is the perfect time to start understanding how to obtain data on the client side and then render it on the browser.
-
-> **TLDR** - an API is a service that provides raw data for public use.
-
-### API Data Formats (5 minutes)
-
-### What is Serialized Data?
-
-All data sent via HTTP are strings. Unfortunately, what we really want to pass between web applications is **structured data** (i.e., arrays and hashes). Thus, native data structures can be **serialized** (converted from our JS objects and other variables) into a string representation of the data. This string can be transmitted and then parsed back into data (de-serialized) by another web agent.  
-
-#### JSON
-
-**JSON** stands for "JavaScript Object Notation" and has become a universal standard for serializing native data structures for transmission. It is light-weight, easy-to-read and quick to parse.
-
-```json
-{
-  "users": [
-    {"name": "Bob", "id": 23},
-    {"name": "Tim", "id": 72}
-  ]
-}
-```
-
-#### XML
-
-**XML** stands for "eXtensible Markup Language" and is the granddaddy of serialized data formats (itself based on HTML). XML is fat, ugly and cumbersome to parse. It remains a major format, however, due to its legacy usage across the web. You'll probably always favor using a JSON API, if available.
+XML looks like this:
 
 ```
 <users>
@@ -83,14 +54,279 @@ All data sent via HTTP are strings. Unfortunately, what we really want to pass b
 </users>
 ```
 
-## Where Do We Find APIs?
+#### JSON
+**JSON** stands for "JavaScript Object Notation" and has become a universal standard for sending and receiving data across the web. It is light-weight, easy-to-read and quick to parse.
 
-APIs are published everywhere. Chances are good that most major content sources you follow online publish their data in some type of serialized format. Heck, [even Marvel publishes an API](http://developer.marvel.com/documentation/getting_started). Look around for a "Developers" section on major websites.
+JSON looks like this:
 
-If you need an API but don't know which specific one to use, directories like the [Programmable Web API Directory](http://www.programmableweb.com/apis/directory), [Todd Motto's Public API list](https://github.com/toddmotto/public-apis) or [Public APIs Directory](http://www.publicapis.com/) can be helpful.
+```json
+{
+  "users": [
+    {"name": "Bob", "id": 23},
+    {"name": "Tim", "id": 72}
+  ]
+}
+```
 
-## What Is An API Key?
+#### What is Serialization?
+All data sent via HTTP is sent as strings. Unfortunately, what we really want to pass between web applications is **structured data** (i.e., arrays and hashes). In order to do so, native data structures are **serialized**: converted from a javascript object into a string representation of the data. This string can be transmitted and then parsed back into data (de-serialized).
 
+### Working with an API
+APIs can be either public or private. If an API is public, anyone can access the data behind it. If an API is private, then  you'll need to get a password (called an API Key) or go through some other form of authorization before you can access data through that API.
+
+We'll start by exploring a public API: [PokéApi](https://pokeapi.co/)
+
+For the next 10 minutes, explore the PokéApi. Remember that web APIs take requests for data through the URL.
+
+1. How do you get data for all Pokemon?
+2. What about for a specific Pokemon?
+3. How do you get data about a location?
+4. What is similar and different about these URLs and the ones we've used for our routes in Rails?
+
+## What is AJAX
+**AJAX** stands for "Asynchronous JavaScript and XML".
+
+Back in the early- and mid-1990s, the only way for a user to request new data was through the server-based request-response cycle that we've learned and covered with Rails. The user would click on a link or change some data in the UI and the whole page would reload. This was inefficient for the user and the User Experience; it was also and inefficient use of bandwidth, as an entire rendered page had to be transmitted rather than just the new or updated data.
+
+This is where AJAX came in to play. AJAX is a way for us to make HTTP requests in JavaScript. So we can make requests to our server (asynchronously) without having to reload the page!
+
+AJAX was first implemented in Internet Explorer as the `XMLHttpRequest` object and later adopted by Mozilla and Safari. In 2005, Gmail and Google Maps were rebuilt using `XMLHttpRequest and a developer named Jesse James Garret wrote an article title *"Ajax: A New Approach to Web Applications"*, where he coined the term *AJAX*.
+
+Building apps with `XMLHttpRequest` lead to a better user experience and faster applications but it was extremely verbose and cumbersome to work with. To make it easier, jQuery implemented the `.ajax()` api, abstracting away `XMLHttpRequest` into a jQuery-like set of function calls.
+
+More recently, WHATWG (the standards body for HTML) proposed the `fetch()` api as a browser-native implementation of AJAX similar to the jQuery api.
+
+### Lets see it in Action
+
+We will use jQuery's `.ajax()` method to make AJAX calls to an API. The standard requests we will be making are GET, POST, PUT, PATCH and DELETE.
+
+Let's try that out ourselves. Clone down [this repo](https://git.generalassemb.ly/ga-wdi-exercises/js-pokeapi-ajax).
+
+In `script.js`, we will use AJAX to send a `GET` request to the Pokemon API API...
+
+```js
+// Make sure to add your API key to the URL!
+const url = 'https://pokeapi.co/api/v2/pokemon/1/';
+
+// $.ajax takes an object as an argument with at least three key-value pairs...
+// (1) The URL endpoint for the JSON object.
+// (2) Type of HTTP request.
+// (3) Datatype. Usually JSON.
+$.ajax({
+  url: url, // (1)
+  type: 'GET', // (2)
+  dataType: 'json', // (3)
+}).done(() => {
+  console.log('Ajax request success!');
+}).fail(() => {
+	console.log('Ajax request fails!');
+}).always(() => {
+	console.log('This always happens regardless of successful ajax request or not.');
+});
+```
+
+Every AJAX request needs a URL (where we're making our request), the type (or method) of our request and the dataType that we want back (JSON or XML). jQuery's `.ajax()` method uses Promises to handle the asynchronicity of making AJAX requests. 
+
+### Aside: Promises & Asynchronous JS
+An AJAX request is asynchronous: we'll make our request to the server and some time later will get our response. In the meantime, the rest of our code will keep running. We need some way to handle it when it's finished. We've previously handled asynchronicity like this using callbacks. jQuery's `.ajax()` method uses Promises.
+
+You'll notice there are 3 functions chained onto the AJAX call. These are our **promise methods**. Promises are callbacks that may or may not happen. A promise represents the future result of an asynchronous operation. It's how we handle the return value of our `$.ajax` request.
+
+* `.done()` - this code is run if the AJAX call is successful
+* `.fail()` - this code is run if the AJAX call is not successful
+* `.always()` - this code is always run, regardless of whether the AJAX call is successful or not
+
+The `$.ajax()` method makes our asynchronous call to the server using `XMLHttpRequest` and returns a Promise: an object that represents some future value. If our HTTP Request is successful, it'll call `.done()`, if it isn't then it'll call `.fail()`.
+
+### The API Response
+But how do we access the JSON object we saw in the browser before? By passing in an argument to the anonymous function callback. The `$.ajax` call returns a response that you can then pass in as an argument to the promise.
+
+```js
+.done((response) => {
+  console.log(response)
+})
+```
+
+> `response` contains the information received from the AJAX call.
+
+We can drill through this response just like any other JS object...
+
+```js
+.done((response) => {
+  console.log(response.forms.name)
+})
+```
+
+## You Do: DOM Manipulation Using Response Data (10 minutes)
+
+Delete the HTML inside of `index.html` (though not the two `<script>` tags!) and replace it with a form and a `<h1>`. Your form should include a single input for an ID and a submit button.
+
+Add an event listener to your form so that when the user submit it, you make an AJAX call to the PokéAPI to find the Pokemon with the ID from the ID form field.
+
+Inside your `.done()` promise callback, set the text of your `<h1>` to be the name of the Pokemon the user searched for.
+
+> Hint: What does `.preventDefault()` do?
+
+## Break (10 minutes)
+
+## AJAX and CRUD
+So we've used AJAX to do an asynchronous `GET` request to an API. More often than not, 3rd party APIs are read-only. They don't want anyone updating the Pokemon! There are some APIs that you can do full CRUD on, just not for the PokeApi.
+
+It just so happens that we've built a Tunr Rails API where we can do full CRUD with AJAX. Go ahead and fork and clone [this repo](https://git.generalassemb.ly/ga-wdi-exercises/tunr_rails_ajax)!
+
+Once you've cloned the repo, `cd` into it and run the usual commands.
+
+```bash
+$ bundle update
+$ rails db:drop db:create db:migrate db:seed
+```
+
+We can now use `$.ajax()` to make asynchronous HTTP requests to our Tunr API! Run `rails s` and visit `localhost:3000` in your browser. Open up `app/assets/javascripts/application.js`, you should see this at the bottom of the file:
+
+```
+$(document).ready(() => {
+  $('.js-get').on('click', e => {
+    e.preventDefault();
+    console.log('clicked!');
+  });
+
+  $('.js-post').on('click', e => {
+    e.preventDefault();
+    console.log('clicked!');
+  });
+
+  $('.js-put').on('click', e => {
+    e.preventDefault();
+    console.log('clicked!');
+  });
+
+  $('.js-delete').on('click', e => {
+    e.preventDefault();
+    console.log('clicked!');
+  });
+});
+```
+
+We're going to replace the code inside our four event handlers with 4 AJAX calls to our Rails API.
+
+### Get
+Lets start with our `GET` request. This won't look too different from the one we created for the PokeApi before:
+
+<details>
+	<summary>AJAX `GET` request</summary>
+	
+```
+$('.js-get').on('click', () => {
+	$.ajax({
+	  type: 'GET',
+	  dataType: 'json',
+	  url: '/artists'
+	}).done((response) => {
+	  console.log(response)
+	}).fail((response) => {
+	  console.log('Ajax get request failed.')
+	})
+})
+```
+
+</details>
+
+### Post
+
+<details>
+	<summary>AJAX `POST` request</summary>
+	
+```
+$('.js-post').on('click', () => {
+    $.ajax({
+      type: 'POST',
+      data: {
+        artist: {
+          name: 'Limp Bizkit',
+          nationality: 'USA',
+          photo_url: 'http://nerdist.com/wp-content/uploads/2014/12/limp_bizkit-970x545.jpg'
+        }
+      },
+      dataType: 'json',
+      url: '/artists'
+    }).done((response) => {
+      console.log(response)
+    }).fail((response) => {
+      console.log('AJAX POST failed')
+    })
+})
+```
+
+</details>
+
+### Put
+
+<details>
+	<summary>AJAX `PUT` request</summary>
+	
+```
+$('.js-put').on('click', () => {
+    $.ajax({
+      type: 'PUT',
+      data: {
+        artist: {
+          name: 'Robert Goulet',
+          nationality: 'British',
+          photo_url: 'http://media.giphy.com/media/u5yMOKjUpASwU/giphy.gif'
+        }
+      },
+      dataType: 'json',
+      url: '/artists/6'
+    }).done((response) => {
+      console.log(response)
+    }).fail(() => {
+      console.log('Failed to update.')
+    })
+})
+```
+
+</details>
+
+### Delete
+
+<details>
+	<summary>AJAX `DELETE` request</summary>
+	
+```
+$('.js-delete').on('click', () => {
+    $.ajax({
+      type: 'DELETE',
+      dataType: 'json',
+      url: '/artists/4'
+    }).done((response) => {
+      console.log('DELETED')
+      console.log(response)
+    }).fail(() => {
+      console.log('Failed to delete.')
+    })
+})
+```
+
+</details>
+
+## Closing
+JavaScript developers often need to perform CRUD functionality to/from an API. Today we've used jQuery to do this, but there are other smaller libraries that exclusively handle API endpoint interactions. Right now, an AJAX library called axios is very popular, which we'll use later on in the course. There is also the JS language-standard `fetch`, which will replace `XMLHttpRequest` eventually, but its implementation has not stabilized.
+
+## Sample Quiz Questions
+
+* Write an AJAX GET request to a known end point.  
+* How does a promise differ from a callback?  
+* Write an AJAX POST to create an object in a rails application.  
+
+-------
+## Practice
+
+* Do everything we've done in class today for Songs.
+* Create an AJAX request in another app you've created (e.g., projects, Scribble). Be sure to make sure your controller actions respond to JSON.
+
+## Bonus
+
+### API Keys
 While the majority of APIs are free to use, many of them require an API "key" that identifies the developer requesting access. This is done to regulate usage and prevent abuse. Some APIs also rate-limit developers, meaning they have caps on the free data allowed during a given time period.
 
 Let's try making a GET request to the [Giphy API](https://api.giphy.com/)...
@@ -130,436 +366,133 @@ You should see a big JSON object. Lucky for us, we'll be able to navigate throug
 
 </details>
 
-## `$.ajax` (25 minutes)
+### Fetch, jQuery, XMLHttpRequest
+There are three ways of making AJAX calls in JavaScript. The oldest is `XMLHttpRequest`. `fetch()` is the emerging standard.
 
-We can interact with APIs using a jQuery method called AJAX. AJAX ("Asynchronous Javascript and XML") is the method through which we can send HTTP requests from the client asynchronously without having to reload the page. The standard requests we will be making are GET, POST, PUT, PATCH and DELETE.
+Here we have three `GET` requests to the same endpoint using each of the three methods:
 
-Let's try that out ourselves. Let's start by cloning down [this repo](https://git.generalassemb.ly/ga-wdi-exercises/weather_underground_ajax)...
-
-```bash
-$ git clone https://git.generalassemb.ly/ga-wdi-exercises/weather_underground_ajax.git
-```
-
-In `script.js`, we will use AJAX to send a `GET` request to the Weather Underground API...
-
+#### `fetch()`
 ```js
-$('button').on('click', () => {
-  // Make sure to add your API key to the URL!
-  var url = 'https://api.wunderground.com/api/your_key/geolookup/conditions/q/va/midlothian.json'
-  $.ajax({
-    url: url,
-    type: 'get',
-    dataType: 'json'
-    // $.ajax takes an object as an argument with at least three key-value pairs...
-    // (1) The URL endpoint for the JSON object.
-    // (2) Type of HTTP request.
-    // (3) Datatype. Usually JSON.
-  }).done(() => {
-    console.log('Ajax request success!')
-  }).fail(() => {
-    console.log('Ajax request fails!')
-  }).always(() => {
-    console.log('This always happens regardless of successful ajax request or not.')
+// fetch defaults to a `GET` request
+fetch('https://pokeapi.co/api/v2/pokemon/1/')
+  .then((response) => {
+    console.log(response);
   })
-})
+  .catch(err => {
+	  console.log(err)
+  });
 ```
 
-> AJAX is given to us through the jQuery library. Like all jQuery methods, [it is just running vanilla Javascript under the hood](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest).
+**Read more:**
+* [https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
+* [https://davidwalsh.name/fetch](https://davidwalsh.name/fetch)
 
-
-### Promises
-
-You'll notice there are 3 functions chained onto the AJAX call. These are known as **promise methods**. Promises are callbacks that may or may not happen. A promise represents the future result of an asynchronous operation. It's how we do something with the return value of our `$.ajax` request.
-
-* `.done()` - this code is run if the AJAX call is successful
-* `.fail()` - this code is run if the AJAX call is not successful
-* `.always()` - this code is always run, regardless of whether the AJAX call is successful or not
-
-But how do we go about accessing that big JSON object we saw before? By passing in an argument to the anonymous function callback. The `$.ajax` call returns a response that you can then pass in as an argument to the promise.
-
+#### jQuery `.ajax()`
 ```js
-.done((response) => {
-  console.log(response)
-})
-```
-
-> `response` contains the information received from the AJAX call.
-
-We can drill through this response just like any other JS object...
-
-```js
-.done((response) => {
-  console.log(response.current_observation.temp_f)
-})
-```
-
-> Note that we use traditional Javascript object notation to access the response.
-
-## You Do: DOM Manipulation Using Response Data (10 minutes)
-
-Take our existing code for the the Weather Underground app. Instead of logging the temperature, the `.done()` promise should add a div to the page that contains the current wind gust in MPH.  
-
-## Break (10 minutes)
-
-## Intro: AJAX and CRUD (5 minutes)
-
-So we've used AJAX to do an asynchronous `GET` request to an API. More often than not, 3rd party APIs are read-only. They probably don't want just anyone to be able to update the weather however they want. That is not to say that kind of functionality doesn't exist, we just don't have access to it.
-
-It just so happens we've built a Tunr Rails API where we can do full CRUD with AJAX. Go ahead and fork and clone [this repo](https://git.generalassemb.ly/ga-wdi-exercises/tunr_rails_ajax)...
-
-```bash
-$ git clone https://git.generalassemb.ly/ga-wdi-exercises/tunr_rails_ajax.git
-```
-
-Once you've cloned the repo, `cd` into it and run the usual commands...
-
-```bash
-$ bundle install
-$ rails db:drop db:create db:migrate db:seed
-```
-
-We can now use `$.ajax()` to make asynchronous HTTP requests to our Tunr API! Let's go ahead and create a new Artists controller action and corresponding view: `test_ajax`
-
-## Set up an AJAX Test View (10 minutes)
-
-Let's update our routes in `config/routes.rb` for a new route to test all of our AJAX calls in...
-
-```ruby
-get '/test_ajax', to: 'artists#test_ajax'
-```
-
-In `app/controllers/artists_controller.rb`...
-
-```ruby
-def test_ajax
-end
-```
-> This controller action will be triggered when somebody visits our new route
-
-Create `app/views/artists/test_ajax.html.erb` and add the following...
-
-```html
-<div class="get">AJAX GET!</div>
-<div class="post">AJAX POST!</div>
-<div class="put">AJAX PUT!</div>
-<div class="delete">AJAX DELETE!</div>
-```
-
-Let's add an event listener to the first link in `app/assets/javascripts/application.js`...
-
-```javascript
-$(document).ready(() => {
-  $('.get').on('click', () => {
-    console.log('clicked!')
-  })
-})
-```
-
-## AJAX GET (5 minutes)
-
-Great, everything's working. Let's try doing a `GET` request to our API like we did with the Weather Underground. In `app/assets/javascripts/application.js`...
-
-```javascript
-$(document).ready(() => {
-  $('.get').on('click', () => {
-    $.ajax({
-      type: 'GET',
-      dataType: 'json',
-      url: '/artists'
-    }).done((response) => {
-      console.log(response)
-    }).fail((response) => {
-      console.log('Ajax get request failed.')
-    })
-  })
-})
-```
-
-> If we access the response object, we can see all of the artists that were seeded in the database. Inside the done promise, we can interact with and display all the contents of the response.
-
-## Setup for AJAX POST (10 minutes)
-
-Let's update our view to include some input fields and all of our existing artists in `app/views/artists/test_ajax.html.erb`...
-
-```html
-<div class="get">AJAX GET!</div>
-<div class="post">AJAX POST!!</div>
-<div class="put">AJAX PUT!!</div>
-<div class="delete">AJAX DELETE!!</div>
-
-<h1>Artists</h1>
-<ul class="artists">
-  <% @artists.each do |artist| %>
-    <li>
-      <a href="/artists/<%= artist.id %>">
-        <%= artist.name %>
-      </a>
-    </li>
-  <% end %>
-</ul>
-```
-> Now we're listing all the artists in this view. We'll also be including an HTML form soon to generate new artists.
-
-## AJAX Post (10 minutes)
-
-Let's create an artist using AJAX. In `app/assets/javascripts/application.js`...
-
-```javascript
-$(document).ready(() => {
-  $('.post').on('click', () => {
-    $.ajax({
-      type: 'POST',
-      data: {
-        artist: {
-          name: 'Limp Bizkit',
-          nationality: 'USA',
-          photo_url: 'http://nerdist.com/wp-content/uploads/2014/12/limp_bizkit-970x545.jpg'
-        }
-      },
-      dataType: 'json',
-      url: '/artists'
-    }).done((response) => {
-      console.log(response)
-    }).fail((response) => {
-      console.log('AJAX POST failed')
-    })
-  })
-})
-```
-
-In `app/controllers/artists_controller.rb`...
-
-```ruby
-def test_ajax
-  @artists = Artist.all
-end
-```
-
-Every time we click on this button another artist is generated. We can now create things in our database from the client-side. But there's a problem here: we've hardcoded the attributes.
-
-* **How might we be able to dynamically acquire data on the client side instead of hardcoding values?**
-
-## Break (10 minutes)
-
-## You Do: Dynamically Create Artists (15 minutes)
-
-> 10 minutes exercise. 5 minutes review.
-
-Add a form to dynamically generate artists from the client side.
-> Hint: use jQuery selectors to grab the data.
-
-<details>
-  <summary><strong>Solution...</strong></summary>
-
-  ```html
-  <label>Name:</label>
-  <input class="name" type="text">
-  <label>Photo_url:</label>
-  <input class="photo_url" type="text">
-  <label>Nationality:</label>
-  <input class="nationality" type="text">
-  ```
-
-  ```js
-  $(document).ready(() => {
-    $('.post').on('click', () => {
-
-      let name = $('.name').val()
-      let photo_url = $('.photo_url').val()
-      let nationality = $('.nationality').val()
-
-      $.ajax({
-        type: 'POST',
-        data: {
-          artist: {
-            name: name,
-            nationality: nationality,
-            photo_url: photo_url
-          }
-        },
-        dataType: 'json',
-        url: '/artists'
-      }).done((response) => {
-        console.log(response)
-      }).fail(() => {
-        console.log('Failed to create.')
-      })
-    })
-  })
-  ```
-
-</details>
-
-## You Do: AJAX PUT (10 minutes)
-
-Update an existing artist by adding an AJAX call to the next event listener. Don't worry about doing this dynamically - just hardcode artist values into your Javascript for now.
-
-> Updating with AJAX is very similar to creating. The difference is what type of HTTP request you are making and where you are directing it. [Feel free to reference the documentation if you need help](http://api.jquery.com/jquery.ajax/).
-
-<details>
-  <summary><strong>Solution...</strong></summary>
-
-  ```javascript
-  $(document).ready(() => {
-    $('.put').on('click', () => {
-      $.ajax({
-        type: 'PUT',
-        data: {
-          artist: {
-            name: 'Robert Goulet',
-            nationality: 'British',
-            photo_url: 'http://media.giphy.com/media/u5yMOKjUpASwU/giphy.gif'
-          }
-        },
-        dataType: 'json',
-        url: '/artists/6'
-      }).done((response) => {
-        console.log(response)
-      }).fail(() => {
-        console.log('Failed to update.')
-      })
-    })
-  })
-  ```
-
-  > NOTE: This is just to show you how put requests work. Normally we wouldn't hardcode the URL. But think about how we could modify the DOM in order to effectively use AJAX PUT requests.
-
-</details>
-
-## You Do: AJAX DELETE (10 minutes)
-
-Make an event listener that deletes a record in our database using AJAX in `app/assets/javascripts/application.js`. Again, just hardcode the artist information into your Javascript.
-
-> [Resource: AJAX Documentation](http://api.jquery.com/jquery.ajax/)
-
-<details>
-  <summary><strong>Solution...</strong></summary>
-
-  ```js
-  $(document).ready(() => {
-    $('.delete').on('click', () => {
-      $.ajax({
-        type: 'DELETE',
-        dataType: 'json',
-        url: '/artists/4'
-      }).done((response) => {
-        console.log('DELETED')
-        console.log(response)
-      }).fail(() => {
-        console.log('Failed to delete.')
-      })
-    })
-  })
-  ```
-
-</details>
-
-## Closing / Questions
-
-JavaScript developers often need to perform CRUD functionality to/from an API. Today we've used jQuery to do this, but there are other smaller libraries that exclusively handle API endpoint interactions. Right now, an AJAX library called axios is very popular, which we'll use later on in the course. There is also the JS language-standard `fetch`, which will replace `XMLHttpRequest` eventually, but its implementation has not stabilized.
-
-## Sample Quiz Questions
-
-* Write an AJAX GET request to a known end point.  
-* How does a promise differ from a callback?  
-* Write an AJAX POST to create an object in a rails application.  
-
-------
-
-## Screencasts
-* [Part 1](https://youtu.be/K4zRqJm7sXU)
-* [Part 2](https://youtu.be/WoA5LnPXWB8)
-* [Part 3](https://youtu.be/3xUy5QmrBuc)
-
-## Practice
-
-* Do everything we've done in class today for Songs.
-* Create an AJAX request in another app you've created (e.g., projects, Scribble). Be sure to make sure your controller actions respond to JSON.
-
-
-## Cliff Notes
-
-In order to do an AJAX `get` request to a 3rd party API...
-
-```javascript
 $.ajax({
-  url: url,
-  type: 'get',
-  dataType: 'json'
-  // $.ajax takes an object as an argument with at least three key-value pairs...
-  // (1) The URL endpoint for the JSON object.
-  // (2) Type of HTTP request.
-  // (3) Datatype. Usually JSON.
-}).done((response) => {
-  console.log(response)
-  // Here is where you place code for DOM manipulation or anything else you'd like to do with the response
-}).fail(() => {
-  console.log('Ajax request fails!')
-}).always(() => {
-  console.log('This always happens regardless of successful ajax request or not.')
-})
-```
-
-In order to do an AJAX `get` request to your own rails API...
-
-```javascript
-$.ajax({
+  url: 'https://pokeapi.co/api/v2/pokemon/1/',
   type: 'GET',
   dataType: 'json',
-  url: '/artists'
-}).done((response) =>  {
-  console.log(response)
-}).fail((response) => {
-  console.log('Ajax get request failed.')
-})
-```
-
-In order to do an AJAX `post` request to your own rails API...
-```javascript
-$.ajax({
-  type: 'POST',
-  data: {artist: {photo_url: 'www.google.com', name: 'bob', nationality: 'bob'}},
-  dataType: 'json',
-  url: '/artists'
-}).done((response) =>  {
-  console.log(response)
-}).fail((response) => {
-  console.log('Ajax get request failed')
-})
-```
-
-In order to do an AJAX `put` request to your own rails API...
-
-```javascript
-$.ajax({
-  type: 'PUT',
-  data: {
-    artist: {
-      name: 'Robert Goulet',
-      nationality: 'American',
-      photo_url: 'http://media.giphy.com/media/u5yMOKjUpASwU/giphy.gif'
-    }
-  },
-  dataType: 'json',
-  url: '/artists/6'
 }).done((response) => {
-  console.log(response)
+  console.log('Ajax request success!');
+  console.log(response);
 }).fail(() => {
-  console.log('Failed to update.')
+	console.log('Ajax request fails!');
 })
 ```
 
-In order to do an AJAX `delete` request to your own rails API:
+**Read more:**
+* [http://api.jquery.com/jquery.ajax/](http://api.jquery.com/jquery.ajax/)
 
-```javascript
-$.ajax({
-  type: 'DELETE',
-  dataType: 'json',
-  url: '/artists/9'
-}).done((response) => {
-  console.log('DELETED')
-  console.log(response)
-}).fail(() => {
-  console.log('Failed to delete.')
+#### `XMLHttpRequest`
+
+```js
+const request = new XMLHttpRequest();
+
+request.addEventListener("load", function() {
+  console.log(this.responseText);
+});
+request.open("GET", 'https://pokeapi.co/api/v2/pokemon/1/');
+request.send();
+```
+
+**Read more:**
+* [https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest)
+
+### CRUD with Fetch
+
+Here is how you would perform the same CRUD actions on Artists but using `fetch()`.
+
+#### Get
+
+```js
+fetch('/artists.json')
+	.then(response => {
+		console.log(response);
+	})
+	.catch(error => {
+		console.log(error);
+	})
+```
+
+#### Post
+
+```js
+fetch('/artists.json', {
+	method: 'POST',
+	body: JSON.stringify({
+		artist: {
+		  name: 'Limp Bizkit',
+		  nationality: 'USA',
+		  photo_url: 'http://nerdist.com/wp-content/uploads/2014/12/limp_bizkit-970x545.jpg'
+		}
+	})
+}).then(response => {
+	console.log(response);
+}).catch(error => {
+	console.log(error);
 })
 ```
+
+#### Put
+
+```js
+fetch('/artists/6.json', {
+	method: 'PUT',
+	body: JSON.stringify({
+		artist: {
+			name: 'Robert Goulet',
+			nationality: 'British',
+			photo_url: 'http://media.giphy.com/media/u5yMOKjUpASwU/giphy.gif'
+		}
+	})
+}).then(response => {
+	console.log(response);
+}).catch(error => {
+	console.log(error);
+})
+```
+
+#### Delete
+
+```js
+fetch('/artists/4.json', {
+	method: 'DELETE'
+}).then(response => {
+	console.log(response);
+}).catch(error => {
+	console.log(error);
+})
+```
+
+
+
+
+
+
+
+
+
+
+
+
