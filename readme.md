@@ -70,7 +70,7 @@ We'll start by exploring a public API: [PokéApi](https://pokeapi.co/)
 #### You do: PokéApi
 > 10 minutes
 
-Fgior the next 10 minutes, explore the PokéApi. Remember that web APIs take requests for data through the URL.
+For the next 10 minutes, explore the PokéApi. Remember that web APIs take requests for data through the URL.
 
 1. How do you get data for all Pokemon?
 2. What about for a specific Pokemon?
