@@ -119,9 +119,9 @@ $.ajax({
 }).done(() => {
   console.log('Ajax request success!');
 }).fail(() => {
-	console.log('Ajax request fails!');
+  console.log('Ajax request fails!');
 }).always(() => {
-	console.log('This always happens regardless of successful ajax request or not.');
+  console.log('This always happens regardless of successful ajax request or not.');
 });
 ```
 
@@ -183,7 +183,7 @@ $ rails db:drop db:create db:migrate db:seed
 
 We can now use `$.ajax()` to make asynchronous HTTP requests to our Tunr API! Run `rails s` and visit `localhost:3000` in your browser. Open up `app/assets/javascripts/application.js`, you should see this at the bottom of the file:
 
-```
+```js
 $(document).ready(() => {
   $('.js-get').on('click', e => {
     e.preventDefault();
@@ -213,19 +213,19 @@ We're going to replace the code inside our four event handlers with 4 AJAX calls
 Lets start with our `GET` request. This won't look too different from the one we created for the PokeApi before:
 
 <details>
-	<summary>AJAX `GET` request</summary>
-	
-```
+  <summary>AJAX `GET` request</summary>
+  
+```js
 $('.js-get').on('click', () => {
-	$.ajax({
-	  type: 'GET',
-	  dataType: 'json',
-	  url: '/artists'
-	}).done((response) => {
-	  console.log(response)
-	}).fail((response) => {
-	  console.log('Ajax get request failed.')
-	})
+  $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    url: '/artists'
+  }).done((response) => {
+    console.log(response)
+  }).fail((response) => {
+    console.log('Ajax get request failed.')
+  })
 })
 ```
 
@@ -234,9 +234,9 @@ $('.js-get').on('click', () => {
 ### Post
 
 <details>
-	<summary>AJAX `POST` request</summary>
-	
-```
+  <summary>AJAX `POST` request</summary>
+  
+```js
 $('.js-post').on('click', () => {
     $.ajax({
       type: 'POST',
@@ -262,9 +262,9 @@ $('.js-post').on('click', () => {
 ### Put
 
 <details>
-	<summary>AJAX `PUT` request</summary>
-	
-```
+  <summary>AJAX `PUT` request</summary>
+  
+```js
 $('.js-put').on('click', () => {
     $.ajax({
       type: 'PUT',
@@ -290,9 +290,9 @@ $('.js-put').on('click', () => {
 ### Delete
 
 <details>
-	<summary>AJAX `DELETE` request</summary>
-	
-```
+  <summary>AJAX `DELETE` request</summary>
+  
+```js
 $('.js-delete').on('click', () => {
     $.ajax({
       type: 'DELETE',
@@ -379,7 +379,7 @@ fetch('https://pokeapi.co/api/v2/pokemon/1/')
     console.log(response);
   })
   .catch(err => {
-	  console.log(err)
+    console.log(err)
   });
 ```
 
@@ -397,7 +397,7 @@ $.ajax({
   console.log('Ajax request success!');
   console.log(response);
 }).fail(() => {
-	console.log('Ajax request fails!');
+  console.log('Ajax request fails!');
 })
 ```
 
@@ -427,30 +427,30 @@ Here is how you would perform the same CRUD actions on Artists but using `fetch(
 
 ```js
 fetch('/artists.json')
-	.then(response => {
-		console.log(response);
-	})
-	.catch(error => {
-		console.log(error);
-	})
+  .then(response => {
+    console.log(response);
+  })
+  .catch(error => {
+    console.log(error);
+  })
 ```
 
 #### Post
 
 ```js
 fetch('/artists.json', {
-	method: 'POST',
-	body: JSON.stringify({
-		artist: {
-		  name: 'Limp Bizkit',
-		  nationality: 'USA',
-		  photo_url: 'http://nerdist.com/wp-content/uploads/2014/12/limp_bizkit-970x545.jpg'
-		}
-	})
+  method: 'POST',
+  body: JSON.stringify({
+    artist: {
+      name: 'Limp Bizkit',
+      nationality: 'USA',
+      photo_url: 'http://nerdist.com/wp-content/uploads/2014/12/limp_bizkit-970x545.jpg'
+    }
+  })
 }).then(response => {
-	console.log(response);
+  console.log(response);
 }).catch(error => {
-	console.log(error);
+  console.log(error);
 })
 ```
 
@@ -458,18 +458,18 @@ fetch('/artists.json', {
 
 ```js
 fetch('/artists/6.json', {
-	method: 'PUT',
-	body: JSON.stringify({
-		artist: {
-			name: 'Robert Goulet',
-			nationality: 'British',
-			photo_url: 'http://media.giphy.com/media/u5yMOKjUpASwU/giphy.gif'
-		}
-	})
+  method: 'PUT',
+  body: JSON.stringify({
+    artist: {
+      name: 'Robert Goulet',
+      nationality: 'British',
+      photo_url: 'http://media.giphy.com/media/u5yMOKjUpASwU/giphy.gif'
+    }
+  })
 }).then(response => {
-	console.log(response);
+  console.log(response);
 }).catch(error => {
-	console.log(error);
+  console.log(error);
 })
 ```
 
@@ -477,11 +477,11 @@ fetch('/artists/6.json', {
 
 ```js
 fetch('/artists/4.json', {
-	method: 'DELETE'
+  method: 'DELETE'
 }).then(response => {
-	console.log(response);
+  console.log(response);
 }).catch(error => {
-	console.log(error);
+  console.log(error);
 })
 ```
 
