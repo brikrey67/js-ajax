@@ -323,180 +323,22 @@ $('.js-delete').on('click', () => {
 
 JavaScript developers often need to perform CRUD functionality to/from an API. Today we've used jQuery to do this, but there are other smaller libraries that exclusively handle interacting with API endpoints. The most popular library right now is one called axios, which we'll use later on in the course. There is also the increasingly-popular `fetch()` method, which we have an optional bonus for below.
 
-## Sample Quiz Questions
-
-- Write an AJAX `GET` request to a known end point.
-- How does a promise differ from a callback?
-
 -------
-
-## Practice
-
-- Do everything we've done in class today for Songs.
-- Create an AJAX request in another app you've created (e.g. project 2, Scribble). Be sure to make sure your controller actions respond to JSON.
 
 ## Bonus
 
 ### API Keys
 
-While the majority of APIs are free to use, many of them require an API "key" that identifies the developer requesting access. This is done to regulate usage and prevent abuse. Some APIs also rate-limit the number of requests you send over a period of time. This is to manage load on the API.
-
-Let's try making a GET request to the [Giphy API](https://api.giphy.com/)
-
-- First with no key: [http://api.giphy.com/v1/gifs/search?q=funny+cat](http://api.giphy.com/v1/gifs/search?q=funny+cat)
-- Then with a key: [http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=dc6zaTOxFJmzC](http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=dc6zaTOxFJmzC)
-
-**It is very important that you do not push your API keys to a public Github repo.** This is especially true when working with [Amazon Web Services (AWS)](https://aws.amazon.com/). Here's an example of a [stolen key horror story](https://wptavern.com/ryan-hellyers-aws-nightmare-leaked-access-keys-result-in-a-6000-bill-overnight).
-
-### Exercise: The Weather Underground API
-
-For the first part of this exercise we'll be using the [Weather Underground API](http://www.wunderground.com/weather/api/d/docs). Follow the link and [sign up](https://www.wunderground.com/member/registration?mode=api_signup) for a key. You'll need to take the following steps...
-
-- Sign up for a Weather Underground account
-- From the main API page, select "Explore My Options"
-- Click on "Purchase Key" - don't worry, it's free
-- Fill out the resulting form
-
-<details>
-  <summary><strong>If you get stuck try this visual guide to get back on track</strong></summary>
-
-  [Sign-Up Guide](wunderground.md)
-
-</details>
-
-Once you've done that, visit the below link but make sure to replace `your_key` with your API key...
-
-`http://api.wunderground.com/api/your_key/conditions/q/CA/San_Francisco.json`
-
-You should see a big JSON object. Lucky for us, we'll be able to navigate through it using Javascript.
-
-<details>
-  <summary><strong>Now that you have your API key, where should you publish the API key? With whom do we share it?</strong></summary>
-
-  > No where! Keep it out of your git repo! Share it with no one! Treat it like a password and keep it secret.
-
-</details>
+[Read More](/apiKeysExercise.md)
 
 ### Fetch, jQuery, XMLHttpRequest
 
-There are three ways of making AJAX calls in JavaScript. The oldest is `XMLHttpRequest`. `fetch()` is the emerging standard.
-
-Here we have three `GET` requests to the same endpoint using each of the three methods:
-
-#### `fetch()`
-
-```js
-// fetch defaults to a `GET` request
-fetch('https://pokeapi.co/api/v2/pokemon/1/')
-  .then((response) => {
-    console.log(response);
-  })
-  .catch(err => {
-    console.log(err)
-  });
-```
-
-**Read more:**
-
-- [https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
-- [https://davidwalsh.name/fetch](https://davidwalsh.name/fetch)
-
-#### jQuery `.ajax()`
-
-```js
-$.ajax({
-  url: 'https://pokeapi.co/api/v2/pokemon/1/',
-  type: 'GET',
-  dataType: 'json',
-}).done((response) => {
-  console.log('Ajax request success!');
-  console.log(response);
-}).fail(() => {
-  console.log('Ajax request fails!');
-})
-```
-
-**Read more:**
-
-- [http://api.jquery.com/jquery.ajax/](http://api.jquery.com/jquery.ajax/)
-
-#### `XMLHttpRequest`
-
-```js
-const request = new XMLHttpRequest();
-
-request.addEventListener("load", function() {
-  console.log(this.responseText);
-});
-request.open("GET", 'https://pokeapi.co/api/v2/pokemon/1/');
-request.send();
-```
-
-**Read more:**
-- [https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest)
+[Read More](/fetch-jquery-xml.md)
 
 ### CRUD with Fetch
 
-Here is how you would perform the same CRUD actions on Artists but using `fetch()`.
+[Read More](/fetch-crud.md)
 
-#### Get
+### jQuery AJAX Cheat Sheet
 
-```js
-fetch('/artists.json')
-  .then(response => {
-    console.log(response);
-  })
-  .catch(error => {
-    console.log(error);
-  })
-```
-
-#### Post
-
-```js
-fetch('/artists.json', {
-  method: 'POST',
-  body: JSON.stringify({
-    artist: {
-      name: 'Limp Bizkit',
-      nationality: 'USA',
-      photo_url: 'http://nerdist.com/wp-content/uploads/2014/12/limp_bizkit-970x545.jpg'
-    }
-  })
-}).then(response => {
-  console.log(response);
-}).catch(error => {
-  console.log(error);
-})
-```
-
-#### Put
-
-```js
-fetch('/artists/6.json', {
-  method: 'PUT',
-  body: JSON.stringify({
-    artist: {
-      name: 'Robert Goulet',
-      nationality: 'British',
-      photo_url: 'http://media.giphy.com/media/u5yMOKjUpASwU/giphy.gif'
-    }
-  })
-}).then(response => {
-  console.log(response);
-}).catch(error => {
-  console.log(error);
-})
-```
-
-#### Delete
-
-```js
-fetch('/artists/4.json', {
-  method: 'DELETE'
-}).then(response => {
-  console.log(response);
-}).catch(error => {
-  console.log(error);
-})
-```
+[Read More](/jQuery-ajax-cheatsheet.md)
