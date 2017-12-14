@@ -179,7 +179,7 @@ So we've used AJAX to do an asynchronous `GET` request to an API. More often tha
 
 It just so happens that we at GA have built a [Tunr API for artists and songs](https://ga-tunr-ajax.herokuapp.com/artists.json), where we can do full CRUD with AJAX.
 
-To start, open your Terminal, and `cd` to your sandbox, then clone this repo:
+To start, open your Terminal, and `cd` to your sandbox, then clone [this repo](https://git.generalassemb.ly/ga-wdi-exercises/tunr-ajax-jquery/):
 
 ```bash
 git clone git@git.generalassemb.ly:ga-wdi-exercises/tunr-ajax-jquery.git
