@@ -4,18 +4,16 @@
 
 - Explain what an API is and how to use one
 - Describe AJAX and how it lets us build rich client-side applications
-- Use `fetch()` to make an AJAX call
-- Use promises to handle AJAX responses asynchronously
 - Render new HTML content using data loaded from an AJAX request.
 - Perform GET, POST, PUT, and DELETE requests to an API to modify data.
 
-## Framing
+## Framing (5 minutes, 0:05)
 
 Over the past few weeks, we've learned how to build front-end applications using html, css, JS, and jQuery. Yet, our applications can't persist data in databases, nor request data from databases.
 
 Today, we're going to learn how to request information from third-party databases, and how to make our applications more dynamic by making it so our application doesn't need to refresh the page to make a request to an API server!
 
-## Turn & Talk
+## Turn & Talk (10 minutes, 0:15)
 
 > 10 minutes: 5 min T&T, 5 min review
 
@@ -24,7 +22,7 @@ Today, we're going to learn how to request information from third-party database
 1. How many times do you see the page refresh?
 1. When you request new data (i.e. by searching for a location), does the page refresh? Does the Google Maps app get data from a server?
 
-## What is an API
+## What is an API (15 minutes, 0:30)
 
 **API** stands for "Application Programming Interface" and is a way of describing software design. At the highest level, an API is any application with a set of instructions for how programmers can interact with it. The DOM is actually an example of an API.
 
@@ -76,7 +74,7 @@ APIs can be either public or private. If an API is public, anyone can access the
 
 We'll start by exploring a public API: [PokéApi](https://pokeapi.co/)
 
-#### You do: PokéApi
+#### You do: PokéApi (10 minutes, 0:40)
 
 > 10 minutes
 
@@ -88,7 +86,7 @@ For the next 10 minutes, explore the PokéApi. Remember that web APIs take reque
 
 > In order to format JSON in the browser nicely, you might need a plugin like Chrome's [JSON Formatter](https://chrome.google.com/webstore/detail/json-formatter/bcjindcccaagfpapjjmafapmmgkkhgoa?hl=en).
 
-## What is AJAX
+## What is AJAX (15 minutes, 0:55)
 
 **AJAX** stands for "Asynchronous JavaScript and XML".
 
@@ -132,7 +130,7 @@ $.ajax({
 
 Every AJAX request needs a URL (where we're making our request), the type (or method) of our request and the dataType that we want back (JSON or XML). jQuery's `.ajax()` method uses Promises to handle the fact that making AJAX requests is asynchronous.
 
-### Aside: Promises & Asynchronous JS
+### Aside: Promises & Asynchronous JS (10 minutes, 1:05)
 
 An AJAX request is asynchronous: we'll make our request to the server and some time later will get our response. In the meantime, the rest of our code will keep running. We need some way to handle it when it's finished. We've previously handled asynchronous actions by using callbacks. jQuery's `.ajax()` method uses Promises.
 
@@ -164,7 +162,7 @@ We can drill through this response just like any other JS object...
 })
 ```
 
-## You Do: DOM Manipulation Using Response Data (10 minutes)
+## You Do: DOM Manipulation Using Response Data (10 minutes, 1:15)
 
 1. Delete the HTML inside of `index.html` (though not the two `<script>` tags!)
 1. Add a form and a `<h1>` to your HTML. Your form should include a single input for an ID and a submit button.
@@ -173,22 +171,21 @@ We can drill through this response just like any other JS object...
 
 > Hint: What does `.preventDefault()` do?
 
-## Break (10 minutes)
+## Break (10 minutes, 1:25)
 
-## AJAX and CRUD
+## AJAX and CRUD (60 minutes, 2:25)
 
 So we've used AJAX to do an asynchronous `GET` request to an API. More often than not, 3rd party APIs are read-only. They don't want anyone updating the Pokemon! There are some APIs that you can do full CRUD on, just not for the PokeApi.
 
-It just so happens that we've built a Tunr Rails API where we can do full CRUD with AJAX. Go ahead and fork and clone [this repo](https://git.generalassemb.ly/ga-wdi-exercises/tunr_rails_ajax)!
+It just so happens that we at GA have built a [Tunr API for artists and songs](https://ga-tunr-ajax.herokuapp.com/artists.json), where we can do full CRUD with AJAX.
 
-Once you've cloned the repo, `cd` into it and run the usual commands.
+To start, open your Terminal, and `cd` to your sandbox, then clone this repo:
 
 ```bash
-$ bundle update
-$ rails db:drop db:create db:migrate db:seed
+git clone git@git.generalassemb.ly:ga-wdi-exercises/tunr-ajax-jquery.git
 ```
 
-We can now use `$.ajax()` to make asynchronous HTTP requests to our Tunr API! Run `rails s` and visit `localhost:3000` in your browser. Open up `app/assets/javascripts/application.js`, you should see this at the bottom of the file:
+Then `cd` into this repo, and open it on your text editor. We will be working in the `script.js` file. You should see this in the `script.js` file:
 
 ```js
 $(document).ready(() => {
@@ -214,26 +211,28 @@ $(document).ready(() => {
 });
 ```
 
-We're going to replace the code inside our four event handlers with 4 AJAX calls to our Rails API.
+We can now use `$.ajax()` to make asynchronous HTTP requests to our Tunr API!
+
+We're going to replace the code inside our four event handlers with 4 AJAX calls to our API.
 
 ### Get
 Lets start with our `GET` request. This won't look too different from the one we created for the PokeApi before:
 
 <details>
   <summary>AJAX `GET` request:</summary>
-  
+
 ```js
 $('.js-get').on('click', () => {
-  $.ajax({
-    type: 'GET',
-    dataType: 'json',
-    url: '/artists'
-  }).done((response) => {
-    console.log(response)
-  }).fail((response) => {
-    console.log('Ajax get request failed.')
-  })
-})
+   $.ajax({
+     type: 'GET',
+     dataType: 'json',
+     url: 'https://ga-tunr-ajax.herokuapp.com/artists'
+   }).done((response) => {
+     console.log(response)
+   }).fail((response) => {
+     console.log('Ajax get request failed.')
+   })
+ })
 ```
 
 </details>
@@ -243,55 +242,55 @@ To make a post request, we'll change the method type to `POST` and add a `data` 
 
 <details>
   <summary>AJAX `POST` request:</summary>
-  
+
 ```js
 $('.js-post').on('click', () => {
-    $.ajax({
-      type: 'POST',
-      data: {
-        artist: {
-          name: 'Limp Bizkit',
-          nationality: 'USA',
-          photo_url: 'http://nerdist.com/wp-content/uploads/2014/12/limp_bizkit-970x545.jpg'
-        }
-      },
-      dataType: 'json',
-      url: '/artists'
-    }).done((response) => {
-      console.log(response)
-    }).fail((response) => {
-      console.log('AJAX POST failed')
-    })
+  $.ajax({
+    type: 'POST',
+    data: {
+      artist: {
+        name: 'Limp Bizkit',
+        nationality: 'USA',
+        photo_url: 'http://nerdist.com/wp-content/uploads/2014/12/limp_bizkit-970x545.jpg'
+      }
+    },
+    dataType: 'json',
+    url: 'https://ga-tunr-ajax.herokuapp.com/artists'
+  }).done((response) => {
+    console.log(response)
+  }).fail((response) => {
+    console.log('AJAX POST failed')
+  })
 })
 ```
 
 </details>
 
 ### Put
-To make a `PUT` request, we need the updated data we want to store in our database. We'll send it to the route for the item we want to update, i.e. `/artists/6`.
+To make a `PUT` request, we need the updated data we want to store in our database. We'll send it to the route for the item we want to update, i.e. `https://ga-tunr-ajax.herokuapp.com/artists/6`.
 
 <details>
   <summary>AJAX `PUT` request:</summary>
-  
+
 ```js
 $('.js-put').on('click', () => {
     $.ajax({
       type: 'PUT',
+      dataType: 'json',
+      url: 'https://ga-tunr-ajax.herokuapp.com/artists/6',
       data: {
         artist: {
           name: 'Robert Goulet',
           nationality: 'British',
           photo_url: 'http://media.giphy.com/media/u5yMOKjUpASwU/giphy.gif'
         }
-      },
-      dataType: 'json',
-      url: '/artists/6'
+      }
     }).done((response) => {
       console.log(response)
     }).fail(() => {
       console.log('Failed to update.')
     })
-})
+  })
 ```
 
 </details>
@@ -301,25 +300,26 @@ Making a `DELETE` request only requires changing our method type and making our 
 
 <details>
   <summary>AJAX `DELETE` request:</summary>
-  
+
 ```js
 $('.js-delete').on('click', () => {
-    $.ajax({
-      type: 'DELETE',
-      dataType: 'json',
-      url: '/artists/4'
-    }).done((response) => {
-      console.log('DELETED')
-      console.log(response)
-    }).fail(() => {
-      console.log('Failed to delete.')
-    })
+  $.ajax({
+    type: 'DELETE',
+    dataType: 'json',
+    url: 'https://ga-tunr-ajax.herokuapp.com/artists/6'
+  }).done(() => {
+    console.log('DELETED')
+  }).fail(() => {
+    console.log('Failed to delete.')
+  })
 })
 ```
 
-</details>
+</details><br />
 
-## Closing
+**NOTE:** You can find the solution to this exercise [here](https://git.generalassemb.ly/ga-wdi-exercises/tunr-ajax-jquery/blob/solution/script.js)!
+
+## Closing (5 minutes, 2:30)
 
 JavaScript developers often need to perform CRUD functionality to/from an API. Today we've used jQuery to do this, but there are other smaller libraries that exclusively handle interacting with API endpoints. The most popular library right now is one called axios, which we'll use later on in the course. There is also the increasingly-popular `fetch()` method, which we have an optional bonus for below.
 
